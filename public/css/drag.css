@@ -1,0 +1,248 @@
+
+.ChatWindow {
+    position: absolute;
+    height: 390px;
+    width: 200px;
+    background-color: #ffffff;
+    z-index: 0;
+    color: white;
+    /*border: solid 1px;*/
+    left: 0;
+    top: 243px;
+    /*border: 1px solid #ffb734;*/
+    border-radius: 5px;
+    resize: both;
+    -webkit-user-drag: element;
+    box-shadow: 2px 4px 13px rgba(0, 0, 0, .5);
+    /* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#ea8202+47,f4ce5d+100 */
+    background: rgba(255, 183, 52, 0.8);
+    background: -moz-linear-gradient(top, rgba(255, 183, 52, 0.81) 0%, #ff6f00 100%);
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, rgba(255, 183, 52, 0.81)), color-stop(100%, #ff6f00));
+    background: -webkit-linear-gradient(top, rgba(255, 183, 52, 0.8) 0%, #ff6f00 100%);
+    background: -o-linear-gradient(top, rgba(255, 183, 52, 0.8) 0%, #ff6f00 100%);
+    background: -ms-linear-gradient(top, rgba(255, 183, 52, 0.8) 0%, #ff6f00 100%);
+    background: linear-gradient(to bottom, rgba(255, 183, 52, 0.8) 0%, #ff6f00 100%);
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#64c8ef', endColorstr='#00a2e2', GradientType=0);
+
+}
+
+.MessageWindow, .InputContainer {
+    position: absolute;
+    left: 0;
+    right: 0;
+    /*border: 1px solid #ffb734;*/
+}
+
+.MessageWindow {
+    height: 331px;;
+    overflow: auto;
+    top: 27px;;
+    bottom: 46px;
+    background-color: white;
+    position: absolute;
+    border-top: hidden;
+}
+
+.InputContainer {
+    display: inline-flex;
+    bottom: 0;
+    height: 32px;
+    position: absolute;
+    border-radius: 2px;
+
+}
+
+.MyChatContent {
+    background-color: #ffb734;
+    width: 150px;
+    z-index: 50;
+    border-radius: 20px;
+    height: 30px;
+    top: -7px;
+    float: right;
+    margin-top: 2px;
+    margin-bottom: 8px;
+    text-align: center;
+    box-shadow: 2px 4px 13px rgba(0, 0, 0, .5);
+    /* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#ea8202+47,f4ce5d+100 */
+    background: rgba(255, 183, 52, 0.8);
+    background: -moz-linear-gradient(top, rgba(255, 183, 52, 0.81) 0%, #ff6f00 100%);
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, rgba(255, 183, 52, 0.81)), color-stop(100%, #ff6f00));
+    background: -webkit-linear-gradient(top, rgba(255, 183, 52, 0.8) 0%, #ff6f00 100%);
+    background: -o-linear-gradient(top, rgba(255, 183, 52, 0.8) 0%, #ff6f00 100%);
+    background: -ms-linear-gradient(top, rgba(255, 183, 52, 0.8) 0%, #ff6f00 100%);
+    background: linear-gradient(to bottom, rgba(255, 183, 52, 0.8) 0%, #ff6f00 100%);
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#64c8ef', endColorstr='#00a2e2', GradientType=0);
+
+}
+
+.OtherChatContent {
+    background-color: #ffb734;
+    width: 150px;
+    z-index: 50;
+    border-radius: 20px;
+    height: 30px;
+    top: -7px;
+    float: left;
+    margin-top: 2px;
+    margin-bottom: 8px;
+    text-align: center;
+    box-shadow: 2px 4px 13px rgba(0, 0, 0, .5);
+    /* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#ea8202+47,f4ce5d+100 */
+    background: rgba(255, 183, 52, 0.8);
+    background: -moz-linear-gradient(top, rgba(255, 183, 52, 0.81) 0%, #ff6f00 100%);
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, rgba(255, 183, 52, 0.81)), color-stop(100%, #ff6f00));
+    background: -webkit-linear-gradient(top, rgba(255, 183, 52, 0.8) 0%, #ff6f00 100%);
+    background: -o-linear-gradient(top, rgba(255, 183, 52, 0.8) 0%, #ff6f00 100%);
+    background: -ms-linear-gradient(top, rgba(255, 183, 52, 0.8) 0%, #ff6f00 100%);
+    background: linear-gradient(to bottom, rgba(255, 183, 52, 0.8) 0%, #ff6f00 100%);
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#64c8ef', endColorstr='#00a2e2', GradientType=0);
+
+}
+
+.TextField {
+    height: 80%;
+    width: 80%;
+    border-bottom-left-radius: 5px;
+    /*border: 1px solid #ffb734;*/
+    outline: none;
+}
+
+.MyImage1 {
+    background-color: #ffb734;
+    width: 150px;
+    height: 150px;
+    z-index: 50;
+    border-radius: 20px;
+    cursor: pointer;
+    top: -7px;
+    float: right;
+    margin-top: 2px;
+    margin-bottom: 8px;
+    box-shadow: 2px 4px 13px rgba(0, 0, 0, .5);
+
+}
+.OtherImage1 {
+    background-color: #ffb734;
+    width: 150px;
+    height: 150px;
+    z-index: 50;
+    border-radius: 20px;
+    cursor: pointer;
+    top: -7px;
+    float: left;
+    margin-top: 2px;
+    margin-bottom: 8px;
+    box-shadow: 2px 4px 13px rgba(0, 0, 0, .5);
+
+
+}
+
+
+.DraggableElement {
+    background-color: #ffb734;
+    left: 0;
+    top: 0;
+    box-shadow: 2px 4px 13px rgba(0, 0, 0, .5);
+    /* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#ea8202+47,f4ce5d+100 */
+    background: rgba(255, 183, 52, 0.8);
+    background: -moz-linear-gradient(top, rgba(255, 183, 52, 0.81) 0%, #ff6f00 100%);
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, rgba(255, 183, 52, 0.81)), color-stop(100%, #ff6f00));
+    background: -webkit-linear-gradient(top, rgba(255, 183, 52, 0.8) 0%, #ff6f00 100%);
+    background: -o-linear-gradient(top, rgba(255, 183, 52, 0.8) 0%, #ff6f00 100%);
+    background: -ms-linear-gradient(top, rgba(255, 183, 52, 0.8) 0%, #ff6f00 100%);
+    background: linear-gradient(to bottom, rgba(255, 183, 52, 0.8) 0%, #ff6f00 100%);
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#64c8ef', endColorstr='#00a2e2', GradientType=0);
+
+}
+
+.DraggableElement:hover {
+    cursor: move;
+}
+
+.MyChatContent , .OtherChatContent{
+    cursor: move;
+}
+
+.CloseDiv {
+    color: #fffdfa;
+    float: right;
+    margin-right: 5px;
+    margin-top: 2px;
+    border-radius: 50%;
+    width: 20px;
+    text-align: center;
+    /*width: 22px;
+    height: 22px;*/
+}
+
+.CloseDiv:hover {
+    cursor: pointer;
+    background-color: #ff0800;
+    //width: 20px;
+    text-align: center;
+}
+
+.FullScreenImageContainer{
+    left: 0;
+    position: fixed;
+    top: 0;
+    background-color: rgba(0, 0, 0, 0.74);
+    z-index: 500;
+    width: 100%;
+    height: 100%;
+
+}
+.FullScreenImageDiv{
+    bottom: 0;
+    left: 0;
+    position: fixed;
+    right: 0;
+    top: 0;
+    margin-top: 5%;
+    margin-left: 5%;
+    margin-bottom: 5%;
+    margin-right: 5%;
+    z-index: 510;
+    /*text-align: center;*/
+}
+.FullScreenImg{
+    width: 100%;
+    height: 100%;
+    z-index: 520;
+    /*text-align: center;*/
+}
+.sendBtn{
+    width: 20%;
+    height: 100%;
+    text-align: center;
+    background: rgba(255, 183, 52, 0.8);
+    border-bottom-right-radius: 27px;
+    background: -moz-linear-gradient(top, rgba(255, 183, 52, 0.81) 0%, #ff6f00 100%);
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, rgba(255, 183, 52, 0.81)), color-stop(100%, #ff6f00));
+    background: -webkit-linear-gradient(top, rgba(255, 183, 52, 0.8) 0%, #ff6f00 100%);
+    background: -o-linear-gradient(top, rgba(255, 183, 52, 0.8) 0%, #ff6f00 100%);
+    background: -ms-linear-gradient(top, rgba(255, 183, 52, 0.8) 0%, #ff6f00 100%);
+    background: linear-gradient(to bottom, rgba(255, 183, 52, 0.8) 0%, #ff6f00 100%);
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#64c8ef', endColorstr='#00a2e2', GradientType=0);
+
+}
+.sendBtn:hover{
+    cursor: pointer;
+}
+.footer{
+    bottom: 0;
+    position: absolute;
+    text-align: center;
+    width: 100%;
+}
+#logOut{
+    width: 100px;
+    position: absolute;
+    left: 45%;
+    color: #FFB734;
+}
+#logOut:hover{
+    cursor: pointer;
+    color: #FF6F00;
+}

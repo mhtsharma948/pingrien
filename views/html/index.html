@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Angular 2 QuickStart</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script src="../../node_modules/es6-shim/es6-shim.min.js"></script>
+    <script src="../../node_modules/systemjs/dist/system-polyfills.js"></script>
+    <script src="../../node_modules/angular2/es6/dev/src/testing/shims_for_IE.js"></script>
+    <script src="../../node_modules/angular2/bundles/angular2-polyfills.js"></script>
+    <script src="../../node_modules/systemjs/dist/system.src.js"></script>
+    <script src="../../node_modules/rxjs/bundles/Rx.js"></script>
+    <script src="../../node_modules/angular2/bundles/angular2.dev.js"></script>
+    <!--<script>-->
+        <!--System.config({-->
+            <!--packages: {-->
+                <!--app: {-->
+                    <!--format: 'register',-->
+                    <!--defaultExtension: 'js'-->
+                <!--}-->
+            <!--}-->
+        <!--});-->
+        <!--System.import('app/js/main').then(null, console.error.bind(console));-->
+    <!--</script>-->
+    <link rel="stylesheet" href="\css\login.css">
+    <!--<script type="text/javascript" src='js\dp.js'></script>-->
+</head>
+<body>
+<header>
+    <div class="Head">
+        <div class="SiteName"><strong>AppX</strong></div>
+        <input type="button" class="SButton" value="search">
+        <input class="Search" placeholder="Search..." required>
+    </div>
+</header>
+<my-app>Loading...</my-app>
+<section class="Loginform cf">
+    <!--<form name="login"  accept-charset="utf-8" onsubmit="return false;">-->
+        <ul>
+            <li>
+                <!--<label for="usermail">Email</label>-->
+                <input type="email" id="userMail" name="usermail" placeholder="email" required>
+            </li>
+            <li>
+                <!--<label for="password">Password</label>-->
+                <input type="password" id="password" name="password" placeholder="password" required></li>
+            <li>
+                <button class="submit" type="button" onclick="loadXMLDoc()">Login</button>
+                <!--<input type="submit" value="Login">-->
+            </li>
+        </ul>
+    <!--</form>-->
+    <button id="signupBtn" type="button" >Sign up</button>
+    <div id="signupFadder">
+        <iframe src="signup" id="signupFrame"></iframe>
+    </div>
+</section>
+
+<script>
+    function loadXMLDoc() {
+        var xhttp = new XMLHttpRequest();
+        var userMail = document.getElementById("userMail").value.toString();
+        var password = document.getElementById("password").value.toString();
+        xhttp.onreadystatechange = function() {
+            if (xhttp.readyState == 4 && xhttp.status == 200) {
+                if (xhttp.response === "true") {
+                    window.location.assign("/");
+                }
+            }
+        };
+
+        xhttp.open("post", "/login", true);
+        xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+        xhttp.send("userName=" + userMail + "&password=" + password);
+    }
+    var signupBtn = document.getElementById('signupBtn');
+    var signupFrame = document.getElementById('signupFrame');
+    var signupFadder = document.getElementById('signupFadder');
+    signupBtn.addEventListener('click', function () {
+        signupFrame.style.visibility = "visible";
+        signupBtn.style.visibility = "hidden";
+        signupFadder.style.visibility = "visible";
+    });
+    signupFadder.addEventListener('click', function () {
+        if (event.target === signupFadder){
+            signupFadder.style.visibility = "hidden";
+            signupBtn.style.visibility = "visible";
+            signupFrame.style.visibility = "hidden";
+        }
+    });
+</script>
+</body>
+</html>

@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>home</title>
+    <link rel="stylesheet" href="css\login.css">
+    <link rel="stylesheet" href="css\drag.css">
+    <link rel="stylesheet" href="css\dp.css">
+
+</head>
+<body>
+<div class="Head">
+    <header>
+        <div class="SiteName"><strong>AppX</strong></div>
+        <div id="Welcome"></div>
+        <input type="button" class="SButton" value="search">
+        <input class="Search" placeholder="Search..." required>
+    </header>
+</div>
+
+<div class="footer">
+    <hr>
+    <div id="logOut">
+        Log Out
+    </div>
+</div>
+<script type="text/javascript">
+
+    var logout = document.getElementById("logOut");
+    var welcome = document.getElementById("Welcome");
+
+    logout.addEventListener('click', function () {
+        console.log("logout");
+
+        var xhttp = new XMLHttpRequest();
+        xhttp.onreadystatechange = function() {
+            if (xhttp.readyState == 4 && xhttp.status == 200) {
+                if (xhttp.response === "true") {
+                    window.location.assign("/");
+                }
+            }
+        };
+
+        xhttp.open("get", "/logout", true);
+        xhttp.send();
+    });
+
+    var xhttp = new XMLHttpRequest();
+    xhttp.onreadystatechange = function() {
+        if (xhttp.readyState == 4 && xhttp.status == 200) {
+            welcomeData = JSON.parse(xhttp.response)
+            welcome.innerHTML = "Welcome " +welcomeData.userName;
+    }
+    }
+    xhttp.open("get", "/myInfo", true);
+    xhttp.send();
+
+</script>
+<script type="text/javascript" src='js\chatWindow.js' ></script>
+<script type="text/javascript" src='js\dp.js' ></script>
+
+</body>
+</html>

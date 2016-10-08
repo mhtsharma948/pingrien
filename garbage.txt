@@ -1,0 +1,1062 @@
+"use strict";
+
+var express = require('express');
+var router = express.Router();
+var session = require('express-session');
+var mongoose = require('mongoose');
+mongoose.connect('mongodb://localhost/pingrineUser');
+
+var app = express();
+app.use(session({secret: 'ssshhhhh', saveUninitialized: true, resave: true}));
+
+var schema = mongoose.Schema;
+var usersSchema = new schema({
+	userName: {type: String, required: true, unique: true},
+	password: {type: String, required: true}
+});
+var chatSchema = new schema({
+	msg: {type: String},
+	msgType: {type: String},
+	toUserName: {type: String},
+	fromUserName: {type: String}
+});
+var connectionSchema = new schema({
+	userName: {type: String},
+	connection : {
+		name: {type: String},
+		dp: {type: String}
+	}
+});
+
+var User = mongoose.model("user", usersSchema);
+var Chat = mongoose.model("chat", chatSchema);
+var connection = mongoose.model("connection", connectionSchema);
+
+var sess;
+
+/* GET home page. */
+router.get('/', function (req, res, next) {
+	sess = req.session;
+	if (sess.userName) {
+		res.render('home');
+	} else {
+		res.render('index');
+	}
+});
+
+router.post('/register', function (req, res) {
+	var newUser = new User({
+		userName: req.body.userName,
+		password: req.body.password
+	});
+	newUser.save(function (err) {
+		if (err) throw err;
+	});
+
+	res.end(JSON.stringify(true));
+});
+
+router.post('/login', function (req, res) {
+	sess = req.session;
+	var userName = req.body.userName;
+	var password = req.body.password;
+	var temp = req.body;
+	console.log(userName+" "+password);
+	console.log(temp);
+	User.find({
+		userName: userName,
+		password: password
+	}, function (err, user) {
+		if (err) {
+			throw err;
+			res.end(JSON.stringify(false));
+		}
+
+		if (user.length === 1) {
+			sess.userName = userName;
+			sess.password = password;
+			console.log("hi");
+			res.end(JSON.stringify(true));
+		} else {
+			res.end(JSON.stringify(false));
+		}
+	});
+
+});
+
+router.post('/sendMessage', function (req, res) {
+	sess = req.session;
+
+	var msg = req.body.msg;
+	var msgType = req.body.msgType;
+	var toUserName = req.body.toUserName;
+	var chat = new Chat({
+		msg: msg,
+		msgType: msgType,
+		toUserName: toUserName,
+		fromUserName: sess.userName
+	});
+	chat.save(function (err) {
+		if (err) throw err;
+	});
+	//res.send(chat);
+	res.end(JSON.stringify(chat));
+});
+
+router.get('/getMessage', function (req, res) {
+	Chat.find(function (err, chats) {
+		if (err) throw err;
+
+		res.end(JSON.stringify(chats));
+	});
+});
+
+router.get('/myInfo', function (req, res) {
+	sess = req.session;
+	res.end(JSON.stringify({
+		userName: sess.userName
+	}));
+});
+
+router.get('/logout', function (req, res) {
+	req.session.destroy();
+	res.end(JSON.stringify(true));
+});
+
+/*
+router.get('/getConnection', function(){
+	sess = req.session;
+	connection.find({
+		userName: sess.userName
+	}, function (err, user) {
+		if (err) {
+			throw err;
+			res.end(JSON.stringify(false));
+		}
+		if (user.length === 1) {
+			var connection = connection;
+			console.log(connection);
+			res.end(JSON.stringify(true));
+		} else {
+			res.end(JSON.stringify(false));
+		}
+	});
+});
+*/
+
+module.exports = router;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+"use strict";
+class Draggable {
+    constructor(element) {
+        this.element = element;
+        var self = this;
+        var move = function (event) {
+            event.stopPropagation();
+            event.preventDefault();
+            var originalLeft = parseInt(window.getComputedStyle(self.element).left);
+            var originalTop = parseInt(window.getComputedStyle(self.element).top);
+            var mouseDownX = event.clientX;
+            var mouseDownY = event.clientY;
+
+            function dragMe(event) {
+                self.element.style.left = originalLeft + event.clientX - mouseDownX + "px";
+                self.element.style.top = originalTop + event.clientY - mouseDownY + "px";
+                self.element.style.zIndex = 100;
+                event.stopPropagation();
+                if (element.offsetTop <= 80) {
+                    self.element.style.top = 80 + "px";
+                }
+                if (element.offsetLeft <= 0) {
+                    self.element.style.left = 0 + "px";
+                }
+
+            }
+
+            function dropMe(event) {
+                document.removeEventListener('mousemove', dragMe, true);
+                document.removeEventListener('mouseup', dropMe, true);
+                event.stopPropagation();
+            }
+
+            document.addEventListener('mousemove', dragMe, true);
+            document.addEventListener('mouseup', dropMe, true);
+        };
+        var draggableElement = this.element.getElementsByClassName("DraggableElement")[0];
+        draggableElement.addEventListener('mousedown', move, false);
+
+        //increase z-index
+        element.addEventListener('click', function () {
+            self.element.style.zIndex = parseInt(self.element.style.zIndex) + 1;
+        });
+    }
+
+}
+
+class OpenImage {
+    constructor(MyImage1, showImage) {
+        var fullScreenImageContainer = document.createElement('div');
+        fullScreenImageContainer.className = "FullScreenImageContainer";
+
+        var fullScreenImageDiv = document.createElement('div');
+        fullScreenImageDiv.className = "FullScreenImageDiv";
+
+        var fullScreenImg = document.createElement('img');
+        fullScreenImg.className = "FullScreenImg";
+        fullScreenImg.src = showImage;
+
+        fullScreenImageContainer.appendChild(fullScreenImageDiv);
+        fullScreenImageDiv.appendChild(fullScreenImg);
+        MyImage1.addEventListener('click', function () {
+            document.body.appendChild(fullScreenImageContainer);
+        });
+        window.document.onkeydown = function (ev) {
+            if (ev.keyCode === 27 && fullScreenImageContainer != null) {
+                fullScreenImageContainer.parentNode.removeChild(fullScreenImageContainer);
+            }
+        };
+        fullScreenImageContainer.addEventListener('click', function () {
+            if (event.target === fullScreenImageContainer)
+                fullScreenImageContainer.parentNode.removeChild(fullScreenImageContainer);
+        });
+    }
+}
+
+class DpOnClick {
+    constructor() {
+        // debugger;
+        var self = this;
+        //***dp create function***
+        var dpProp = document.createElement('div');
+        dpProp.className = "DpProp";
+        document.body.appendChild(dpProp);
+
+        var dpCreate = function (dpProp) {
+            var dpContainer = document.createElement('div');
+            dpContainer.className = "DpContainer";
+            dpContainer.innerHTML = '<img src="images\\prateek.jpg" alt="abc" class="Dp">' +
+                '<div class="Uname">' +
+                '<h3>Prateek</h3>' +
+                '</div>';
+            dpProp.appendChild(dpContainer);
+        };
+
+        var cwCheck = 0;
+        //***chat window create function***
+        var createChatWindow = function () {
+            //***chat window create function***
+            if (cwCheck === 0) {
+                cwCheck = 1;
+                self.chatWindow = document.createElement('div');
+                var chatWindow = self.chatWindow;
+                chatWindow.className = "ChatWindow";
+                chatWindow.innerHTML = '<div class="DraggableElement" draggable="true">' +
+                    '<font size="5">Mohit</font>' +
+                    '<div class="CloseDiv">' +
+                    '<a class="Close">✕</a>' +
+                    '</div>' +
+                    '</div>' +
+                    '<div class="MessageWindow" >' +
+                    '</div>' +
+                    '<div class="InputContainer">' +
+                    '<input type="text" class="TextField">' +
+                    '<div class="sendBtn">send</div>' +
+                    '</div>';
+
+                var textField = chatWindow.getElementsByClassName("TextField");
+                var sendBtn = chatWindow.getElementsByClassName("sendBtn");
+
+                new Draggable(chatWindow);
+
+
+                self.loadedOnce = false;
+
+                setInterval(function () {
+                    // debugger;
+                    console.log(self.loadedOnce);
+                    if (self.loadedOnce)
+                        var forceLoad = false;
+                    else
+                         forceLoad = true;
+                    self.getMessage(messageWindow, forceLoad, chatWindow);
+                }, 1000);
+                var sendMessage = function () {
+                    var textFieldData = textField[0].value;
+                    console.log(textField[0].value);
+                    var msgType = "txt";
+                    var toUserName = "mohit";
+                    var xhttp = new XMLHttpRequest();
+                    xhttp.onreadystatechange = function () {
+                        if (xhttp.readyState == 4 && xhttp.status == 200) {
+                            var msgData = JSON.parse(xhttp.response);
+                            if (msgData.msgType === "txt") {
+                                console.log(msgData.msg);
+                                // myChatContent[0].innerHTML = msgData.msg;
+                                // messageWindow[0].appendChild(myChatContent[0]);
+                                var myChatContent = document.createElement('div');
+                                myChatContent.className = 'MyChatContent';
+                                myChatContent.innerHTML = msgData.msg;
+                                messageWindow[0].appendChild(myChatContent);
+                                textField[0].value = "";
+                                console.log(textField[0]);
+                            }
+                        }
+                    };
+
+                    xhttp.open("post", "/sendMessage", true);
+                    xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+                    xhttp.send("msg=" + textFieldData + "&msgType=" + msgType + "&toUserName=" + toUserName);
+                };
+                sendBtn[0].addEventListener("click", sendMessage);
+                //exit function
+                var cross = chatWindow.getElementsByClassName("Close");
+                var crossDiv = chatWindow.getElementsByClassName("CloseDiv");
+                var messageWindow = chatWindow.getElementsByClassName("MessageWindow");
+                cross[0].addEventListener("click", function () {
+                    chatWindow.style.visibility = "hidden";
+                    // self.loadedOnce = false;
+                    // cwCheck = 0;
+                });
+
+                cross[0].addEventListener("mousedown", function () {
+                    crossDiv[0].style.backgroundColor = "#AA0000";
+                });
+
+                document.body.appendChild(chatWindow);
+            } else {
+                self.chatWindow.style.visibility = "visible";
+            }
+        };
+        var dp = document.getElementsByClassName("Dp");
+
+        for (let i = 0; i < 1; i++) {
+            dpCreate(dpProp);
+        }
+
+        for (let i = 0; i < dp.length; i++) {
+            dp[i].addEventListener('click', createChatWindow);
+        }
+    }
+    dragDrop(myChatContent, messageWindow) {
+        //drag chat Content
+        var allowDrop = function (ev) {
+            ev.preventDefault();
+        };
+
+        var drag = function (ev) {
+            console.log(ev);
+            ev.dataTransfer.setData("text/html", ev.target.className);
+        };
+
+        var drop = function (ev) {
+            ev.preventDefault();
+            var pickedDataClass = ev.dataTransfer.getData("text/html");
+            var pickedData = chatWindow.getElementsByClassName(pickedDataClass);
+            for (let i = 0; i < pickedData.length; i++) {
+                var nodeCopy = pickedData[i].cloneNode(true);
+                nodeCopy.style.marginTop = 2 + "px";
+            }
+            ev.target.appendChild(nodeCopy);
+        };
+        myChatContent.draggable = "true";
+        messageWindow.addEventListener("drop", drop);
+        messageWindow.addEventListener("dragover", allowDrop);
+        myChatContent.addEventListener("dragstart", drag);
+
+    };
+    getMessage(messageWindow, forceLoad) {
+        var self = this;
+        var xhttp = new XMLHttpRequest();
+        xhttp.onreadystatechange = function () {
+            if (xhttp.readyState == 4 && xhttp.status == 200) {
+                var a = xhttp.response.split(";");
+                var getMsgData = JSON.parse(a[0]);
+                var currentUserName = JSON.stringify(a[1]);
+
+                for (let i = 0; i < getMsgData.length; i++) {
+                    if (forceLoad)
+                        if (JSON.stringify(self.previousMsg) != JSON.stringify(getMsgData)) {
+                            var prat = JSON.stringify("prateek");
+                            var mohit = JSON.stringify("mohit");
+                            if (getMsgData[i].msgType === "txt") {
+                                if (currentUserName === JSON.stringify(getMsgData[i].fromUserName) && JSON.stringify(getMsgData[i].toUserName) === prat) {
+                                    var myChatContent = document.createElement('div');
+                                    myChatContent.className = 'MyChatContent';
+                                    myChatContent.innerHTML = getMsgData[i].msg;
+                                    messageWindow[0].appendChild(myChatContent);
+                                }
+                                if (JSON.stringify(getMsgData[i].fromUserName) === prat && JSON.stringify(getMsgData[i].toUserName) === mohit) {
+                                    myChatContent = document.createElement('div');
+                                    myChatContent.className = 'OtherChatContent';
+                                    myChatContent.innerHTML = getMsgData[i].msg;
+                                    messageWindow[0].appendChild(myChatContent);
+                                }
+                               self.dragDrop(myChatContent, messageWindow[0]);
+                            }
+                            if (getMsgData[i].msgType === "img") {
+                                var showImage;
+                                var myImage1;
+                                if (currentUserName === JSON.stringify(getMsgData[i].fromUserName) && JSON.stringify(getMsgData[i].toUserName) === prat) {
+                                    myImage1 = document.createElement('img');
+                                    myImage1.className = 'MyImage1';
+                                    myImage1.src = getMsgData[i].msg;
+                                    showImage = getMsgData[i].msg;
+                                    messageWindow[0].appendChild(myImage1);
+                                }
+                                if (JSON.stringify(getMsgData[i].fromUserName) === prat && JSON.stringify(getMsgData[i].toUserName) === mohit) {
+                                    myImage1 = document.createElement('img');
+                                    myImage1.className = 'OtherImage1';
+                                    myImage1.src = getMsgData[i].msg;
+                                    showImage = getMsgData[i].msg;
+                                    messageWindow[0].appendChild(myImage1);
+                                }
+                                //myImage1 = chatWindow.getElementsByClassName("MyImage1");
+                                // for (let i = 0; i < myImage1.length; i++) {
+                                //     debugger;
+                                //     console.log(myImage1);
+                                    myImage1.addEventListener('click', new OpenImage(myImage1, showImage));
+                                // }
+                            }
+                        }
+
+                }
+                self.previousMsg = getMsgData;
+                self.loadedOnce = true;
+            }
+        };
+        xhttp.open("get", "/getMessage", true);
+        xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+        xhttp.send();
+
+    }
+}
+var Dps = [];
+Dps.push(new DpOnClick());
+
+
+
+
+
+
+
+
+
+
+"use strict";
+
+class DpOnClick {
+    constructor() {
+        var self = this;
+        var dpProp = document.createElement('div');
+        dpProp.className = "DpProp";
+        document.body.appendChild(dpProp);
+        var dp = document.getElementsByClassName("Dp");
+        for (let i = 0; i < 1; i++) {
+            this.dpCreate(dpProp);
+        }
+        for (let i = 0; i < dp.length; i++) {
+            dp[i].addEventListener('click', this.createChatWindow);
+        }
+    }
+    dpCreate(dpProp) {
+        var dpContainer = document.createElement('div');
+        dpContainer.className = "DpContainer";
+        dpContainer.innerHTML = '<img src="images\\prateek.jpg" alt="abc" class="Dp">' +
+            '<div class="Uname">' +
+            '<h3>Prateek</h3>' +
+            '</div>';
+        dpProp.appendChild(dpContainer);
+    };
+    createChatWindow() {
+        var cwCheck = 0;
+        //var self = this;
+        //***chat window create function***
+        if (cwCheck === 0) {
+            cwCheck = 1;
+            var self = this;
+            self.chatWindow = document.createElement('div');
+            var chatWindow = self.chatWindow;
+            chatWindow.className = "ChatWindow";
+            chatWindow.innerHTML = '<div class="DraggableElement" draggable="true">' +
+                '<font size="5">Mohit</font>' +
+                '<div class="CloseDiv">' +
+                '<a class="Close">✕</a>' +
+                '</div>' +
+                '</div>' +
+                '<div class="MessageWindow" >' +
+                '</div>' +
+                '<div class="InputContainer">' +
+                '<input type="text" class="TextField">' +
+                '<div class="sendBtn">send</div>' +
+                '</div>';
+
+            var textField = chatWindow.getElementsByClassName("TextField");
+            var sendBtn = chatWindow.getElementsByClassName("sendBtn");
+
+           // new Draggable(chatWindow);
+
+
+            self.loadedOnce = false;
+
+            setInterval(function () {
+                // debugger;
+
+                if (self.loadedOnce)
+                    var forceLoad = false;
+                else
+                    forceLoad = true;
+                debugger;
+                self.getMessage(messageWindow, forceLoad);
+
+            }, 1000);
+
+            var sendMessage = function () {
+                var textFieldData = textField[0].value;
+                console.log(textField[0].value);
+                var msgType = "txt";
+                var toUserName = "mohit";
+                var xhttp = new XMLHttpRequest();
+                xhttp.onreadystatechange = function () {
+                    if (xhttp.readyState == 4 && xhttp.status == 200) {
+                        var msgData = JSON.parse(xhttp.response);
+                        if (msgData.msgType === "txt") {
+                            console.log(msgData.msg);
+                            // myChatContent[0].innerHTML = msgData.msg;
+                            // messageWindow[0].appendChild(myChatContent[0]);
+                            var myChatContent = document.createElement('div');
+                            myChatContent.className = 'MyChatContent';
+                            myChatContent.innerHTML = msgData.msg;
+                            messageWindow[0].appendChild(myChatContent);
+                            textField[0].value = "";
+                            console.log(textField[0]);
+                        }
+                    }
+                };
+
+                xhttp.open("post", "/sendMessage", true);
+                xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+                xhttp.send("msg=" + textFieldData + "&msgType=" + msgType + "&toUserName=" + toUserName);
+            };
+            sendBtn[0].addEventListener("click", sendMessage);
+            //exit function
+            var cross = chatWindow.getElementsByClassName("Close");
+            var crossDiv = chatWindow.getElementsByClassName("CloseDiv");
+            var messageWindow = chatWindow.getElementsByClassName("MessageWindow");
+            cross[0].addEventListener("click", function () {
+                chatWindow.style.visibility = "hidden";
+                // self.loadedOnce = false;
+                // cwCheck = 0;
+            });
+
+            cross[0].addEventListener("mousedown", function () {
+                crossDiv[0].style.backgroundColor = "#AA0000";
+            });
+
+            document.body.appendChild(chatWindow);
+        } else {
+            self.chatWindow.style.visibility = "visible";
+        }
+    };
+    dragDrop(myChatContent, messageWindow) {
+        //drag chat Content
+        var allowDrop = function (ev) {
+            ev.preventDefault();
+        };
+
+        var drag = function (ev) {
+            console.log(ev);
+            ev.dataTransfer.setData("text/html", ev.target.className);
+        };
+
+        var drop = function (ev) {
+            ev.preventDefault();
+            var pickedDataClass = ev.dataTransfer.getData("text/html");
+            var pickedData = chatWindow.getElementsByClassName(pickedDataClass);
+            for (let i = 0; i < pickedData.length; i++) {
+                var nodeCopy = pickedData[i].cloneNode(true);
+                nodeCopy.style.marginTop = 2 + "px";
+            }
+            ev.target.appendChild(nodeCopy);
+        };
+        myChatContent.draggable = "true";
+        messageWindow.addEventListener("drop", drop);
+        messageWindow.addEventListener("dragover", allowDrop);
+        myChatContent.addEventListener("dragstart", drag);
+
+    };
+    getMessage(messageWindow, forceLoad) {
+        var self = this;
+        var xhttp = new XMLHttpRequest();
+        xhttp.onreadystatechange = function () {
+            if (xhttp.readyState == 4 && xhttp.status == 200) {
+                var a = xhttp.response.split(";");
+                var getMsgData = JSON.parse(a[0]);
+                var currentUserName = JSON.stringify(a[1]);
+
+                for (let i = 0; i < getMsgData.length; i++) {
+                    if (forceLoad)
+                        if (JSON.stringify(self.previousMsg) != JSON.stringify(getMsgData)) {
+                            var prat = JSON.stringify("prateek");
+                            var mohit = JSON.stringify("mohit");
+                            if (getMsgData[i].msgType === "txt") {
+                                if (currentUserName === JSON.stringify(getMsgData[i].fromUserName) && JSON.stringify(getMsgData[i].toUserName) === prat) {
+                                    var myChatContent = document.createElement('div');
+                                    myChatContent.className = 'MyChatContent';
+                                    myChatContent.innerHTML = getMsgData[i].msg;
+                                    messageWindow[0].appendChild(myChatContent);
+                                }
+                                if (JSON.stringify(getMsgData[i].fromUserName) === prat && JSON.stringify(getMsgData[i].toUserName) === mohit) {
+                                    myChatContent = document.createElement('div');
+                                    myChatContent.className = 'OtherChatContent';
+                                    myChatContent.innerHTML = getMsgData[i].msg;
+                                    messageWindow[0].appendChild(myChatContent);
+                                }
+                               self.dragDrop(myChatContent, messageWindow[0]);
+                            }
+                            if (getMsgData[i].msgType === "img") {
+                                var showImage;
+                                var myImage1;
+                                if (currentUserName === JSON.stringify(getMsgData[i].fromUserName) && JSON.stringify(getMsgData[i].toUserName) === prat) {
+                                    myImage1 = document.createElement('img');
+                                    myImage1.className = 'MyImage1';
+                                    myImage1.src = getMsgData[i].msg;
+                                    showImage = getMsgData[i].msg;
+                                    messageWindow[0].appendChild(myImage1);
+                                }
+                                if (JSON.stringify(getMsgData[i].fromUserName) === prat && JSON.stringify(getMsgData[i].toUserName) === mohit) {
+                                    myImage1 = document.createElement('img');
+                                    myImage1.className = 'OtherImage1';
+                                    myImage1.src = getMsgData[i].msg;
+                                    showImage = getMsgData[i].msg;
+                                    messageWindow[0].appendChild(myImage1);
+                                }
+                                //myImage1 = chatWindow.getElementsByClassName("MyImage1");
+                                // for (let i = 0; i < myImage1.length; i++) {
+                                //     debugger;
+                                //     console.log(myImage1);
+                                    myImage1.addEventListener('click', new OpenImage(myImage1, showImage));
+                                // }
+                            }
+                        }
+
+                }
+                self.previousMsg = getMsgData;
+                self.loadedOnce = true;
+            }
+        };
+        xhttp.open("get", "/getMessage", true);
+        xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+        xhttp.send();
+
+    }
+}
+var Dps = [];
+Dps.push(new DpOnClick());
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+"use strict";
+class Draggable {
+    constructor(element) {
+        this.element = element;
+        var self = this;
+        var move = function (event) {
+            event.stopPropagation();
+            event.preventDefault();
+            var originalLeft = parseInt(window.getComputedStyle(self.element).left);
+            var originalTop = parseInt(window.getComputedStyle(self.element).top);
+            var mouseDownX = event.clientX;
+            var mouseDownY = event.clientY;
+
+            function dragMe(event) {
+                self.element.style.left = originalLeft + event.clientX - mouseDownX + "px";
+                self.element.style.top = originalTop + event.clientY - mouseDownY + "px";
+                self.element.style.zIndex = 100;
+                event.stopPropagation();
+                if (element.offsetTop <= 80) {
+                    self.element.style.top = 80 + "px";
+                }
+                if (element.offsetLeft <= 0) {
+                    self.element.style.left = 0 + "px";
+                }
+
+            }
+
+            function dropMe(event) {
+                document.removeEventListener('mousemove', dragMe, true);
+                document.removeEventListener('mouseup', dropMe, true);
+                event.stopPropagation();
+            }
+
+            document.addEventListener('mousemove', dragMe, true);
+            document.addEventListener('mouseup', dropMe, true);
+        };
+        var draggableElement = this.element.getElementsByClassName("DraggableElement")[0];
+        draggableElement.addEventListener('mousedown', move, false);
+
+        //increase z-index
+        element.addEventListener('click', function () {
+            self.element.style.zIndex = parseInt(self.element.style.zIndex) + 1;
+        });
+    }
+
+}
+
+class OpenImage {
+    constructor(MyImage1, showImage) {
+        var fullScreenImageContainer = document.createElement('div');
+        fullScreenImageContainer.className = "FullScreenImageContainer";
+
+        var fullScreenImageDiv = document.createElement('div');
+        fullScreenImageDiv.className = "FullScreenImageDiv";
+
+        var fullScreenImg = document.createElement('img');
+        fullScreenImg.className = "FullScreenImg";
+        fullScreenImg.src = showImage;
+
+        fullScreenImageContainer.appendChild(fullScreenImageDiv);
+        fullScreenImageDiv.appendChild(fullScreenImg);
+        MyImage1.addEventListener('click', function () {
+            document.body.appendChild(fullScreenImageContainer);
+        });
+        window.document.onkeydown = function (ev) {
+            if (ev.keyCode === 27 && fullScreenImageContainer != null) {
+                fullScreenImageContainer.parentNode.removeChild(fullScreenImageContainer);
+            }
+        };
+        fullScreenImageContainer.addEventListener('click', function () {
+            if (event.target === fullScreenImageContainer)
+                fullScreenImageContainer.parentNode.removeChild(fullScreenImageContainer);
+        });
+    }
+}
+
+class DpOnClick {
+    constructor() {
+        // debugger;
+        var self = this;
+        //***dp create function***
+        var dpProp = document.createElement('div');
+        dpProp.className = "DpProp";
+        document.body.appendChild(dpProp);
+        var dpCreate = function (dpProp) {
+            var xhttp = new XMLHttpRequest();
+            xhttp.onreadystatechange = function () {
+                if (xhttp.readyState == 4 && xhttp.status == 200) {
+                    var conn = JSON.parse(xhttp.response);
+                    this.uName = conn;
+                    for (let i=0; i<conn.length; i++){
+                        var dpContainer = document.createElement('div');
+                        var img = document.createElement('img');
+                        var uname = document.createElement('div');
+                        var unameH3 = document.createElement('h3');
+
+                        dpContainer.className = "DpContainer";
+                        img.className = "Dp";
+                        img.src = conn[i].connection.dp;
+                        uname.className = "Uname";
+                        unameH3.innerHTML = conn[i].connection.name;
+
+                        dpProp.appendChild(dpContainer);
+                        dpContainer.appendChild(img);
+                        dpContainer.appendChild(uname);
+                        uname.appendChild(unameH3);
+
+                    }
+
+                    var dp = document.getElementsByClassName("Dp");
+                    var dpContainer = document.getElementsByClassName("DpContainer");
+                    for (let i = 0; i < dp.length; i++) {
+                        dp[i].addEventListener('click', createChatWindow);
+                    }
+                    self.dragDrop(dp, dpContainer, dpProp);
+                }
+            };
+
+            xhttp.open("get", "/getConnection", true);
+            xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+            xhttp.send();
+
+        };
+        var cwCheck = 0;
+        var createChatWindow = function () {
+            //***chat window create function***
+            if (cwCheck === 0) {
+                cwCheck += 1;
+                self.chatWindow = document.createElement('div');
+                var chatWindow = self.chatWindow;
+                chatWindow.className = "ChatWindow";
+                chatWindow.innerHTML = '<div class="DraggableElement" draggable="true">' +
+                    '<font size="5">Mohit</font>' +
+                    '<div class="CloseDiv">' +
+                    '<a class="Close">✕</a>' +
+                    '</div>' +
+                    '</div>' +
+                    '<div class="MessageWindow" >' +
+                    '</div>' +
+                    '<div class="InputContainer">' +
+                    '<input type="text" class="TextField">' +
+                    '<div class="sendBtn">send</div>' +
+                    '</div>';
+
+                var textField = chatWindow.getElementsByClassName("TextField");
+                var sendBtn = chatWindow.getElementsByClassName("sendBtn");
+
+                new Draggable(chatWindow);
+
+
+                self.loadedOnce = false;
+
+                setInterval(function () {
+                    // debugger;
+                    console.log(self.loadedOnce);
+                    if (self.loadedOnce)
+                        var forceLoad = false;
+                    else
+                        forceLoad = true;
+                    self.getMessage(messageWindow, forceLoad, chatWindow);
+                }, 1000);
+                var sendMessage = function () {
+                    var textFieldData = textField[0].value;
+                    console.log(textField[0].value);
+                    var msgType = "txt";
+                    var toUserName = "mohit";
+                    var xhttp = new XMLHttpRequest();
+                    xhttp.onreadystatechange = function () {
+                        if (xhttp.readyState == 4 && xhttp.status == 200) {
+                            var msgData = JSON.parse(xhttp.response);
+                            if (msgData.msgType === "txt") {
+                                console.log(msgData.msg);
+                                // myChatContent[0].innerHTML = msgData.msg;
+                                // messageWindow[0].appendChild(myChatContent[0]);
+                                var myChatContent = document.createElement('div');
+                                myChatContent.className = 'MyChatContent';
+                                myChatContent.innerHTML = msgData.msg;
+                                messageWindow[0].appendChild(myChatContent);
+                                textField[0].value = "";
+                                console.log(textField[0]);
+                            }
+                        }
+                    };
+
+                    xhttp.open("post", "/sendMessage", true);
+                    xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+                    xhttp.send("msg=" + textFieldData + "&msgType=" + msgType + "&toUserName=" + toUserName);
+                };
+                sendBtn[0].addEventListener("click", sendMessage);
+                //exit function
+                var cross = chatWindow.getElementsByClassName("Close");
+                var crossDiv = chatWindow.getElementsByClassName("CloseDiv");
+                var messageWindow = chatWindow.getElementsByClassName("MessageWindow");
+                cross[0].addEventListener("click", function () {
+                    chatWindow.style.visibility = "hidden";
+                     cwCheck -= 1;
+                });
+
+                cross[0].addEventListener("mousedown", function () {
+                    crossDiv[0].style.backgroundColor = "#AA0000";
+                });
+
+                document.body.appendChild(chatWindow);
+            } else {
+                self.chatWindow.style.visibility = "visible";
+            }
+        };
+        dpCreate(dpProp);
+    }
+    dragDrop(dragElement, dropZone, mainContainer) {
+        //drag chat Content
+        //var dpOnClick = new DpOnClick;
+
+        var allowDrop = function (ev) {
+            ev.preventDefault();
+        };
+
+        var drag = function (ev) {
+            console.log(ev.target.className);
+            ev.dataTransfer.setData("text/html", ev.target.className);
+        };
+
+        var drop = function (ev) {
+            ev.preventDefault();
+            var pickedDataClass = ev.dataTransfer.getData("text/html");
+            var pickedData = chatWindow.getElementsByClassName(pickedDataClass);
+            for (let i = 0; i < pickedData.length; i++) {
+                var nodeCopy = pickedData[i].cloneNode(true);
+                nodeCopy.style.marginTop = 2 + "px";
+            }
+            ev.target.appendChild(nodeCopy);
+        };
+
+        var dropForGrp = function (ev) {
+            ev.preventDefault();
+            var pickedDataClass = ev.dataTransfer.getData("text/html");
+            var pickedData = mainContainer.getElementsByClassName(pickedDataClass);
+            console.log(pickedData);
+            console.log(pickedDataClass);
+           /* for (let i = 0; i < pickedData.length; i++) {
+                console.log("in");
+            }*/
+            var xhttp = new XMLHttpRequest();
+            var dpProp = document.getElementsByClassName("DpProp");
+            xhttp.onreadystatechange = function () {
+                if (xhttp.readyState == 4 && xhttp.status == 200) {
+                    console.log(xhttp.response);
+                    var grpConn = JSON.parse(xhttp.response);
+                    for (let i=0; i<grpConn.length; i++){
+                        var dpContainer = document.createElement('div');
+                        var img = document.createElement('img');
+                        var uname = document.createElement('div');
+                        var unameH3 = document.createElement('h3');
+
+                        dpContainer.className = "DpContainer";
+                        img.className = "Dp";
+                        img.src = grpConn[i].dp;
+                        uname.className = "Uname";
+                        unameH3.innerHTML = grpConn[i].name;
+
+                        dpProp[0].appendChild(dpContainer);
+                        dpContainer.appendChild(img);
+                        dpContainer.appendChild(uname);
+                        uname.appendChild(unameH3);
+
+                    }
+
+                    var dp = document.getElementsByClassName("Dp");
+                    var dpContainer = document.getElementsByClassName("DpContainer");
+                    for (let i = 0; i < dp.length; i++) {
+                        console.log(dp);
+                        dp[i].addEventListener('click', dpOnClick.createChatWindow());
+                    }
+                    //self.dragDrop(dp, dpContainer, dpProp);
+                }
+            };
+
+            xhttp.open("post", "/addGrpConnections", true);
+            xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+            xhttp.send("fromUserName=" +"mohit"+ "&toUserName1="+"prateek" + "&toUserName2="+"abc" + "&dp="+"/images/DSC_0533.JPG");
+        }
+
+        for (var i = 0; i < dragElement.length; i++) {
+            dragElement[i].draggable = "true";
+            dropZone[i].addEventListener("drop", dropForGrp);
+            dropZone[i].addEventListener("dragover", allowDrop);
+            dragElement[i].addEventListener("dragstart", drag);
+        }
+    };
+    getMessage(messageWindow, forceLoad) {
+        var self = this;
+        var xhttp = new XMLHttpRequest();
+        xhttp.onreadystatechange = function () {
+            if (xhttp.readyState == 4 && xhttp.status == 200) {
+                var a = xhttp.response.split(";");
+                var getMsgData = JSON.parse(a[0]);
+                var currentUserName = JSON.stringify(a[1]);
+
+                for (let i = 0; i < getMsgData.length; i++) {
+                    if (forceLoad)
+                        if (JSON.stringify(self.previousMsg) != JSON.stringify(getMsgData)) {
+                            var prat = JSON.stringify("prateek");
+                            var mohit = JSON.stringify("mohit");
+                            if (getMsgData[i].msgType === "txt") {
+                                if (currentUserName === JSON.stringify(getMsgData[i].fromUserName) && JSON.stringify(getMsgData[i].toUserName) === prat) {
+                                    var myChatContent = document.createElement('div');
+                                    myChatContent.className = 'MyChatContent';
+                                    myChatContent.innerHTML = getMsgData[i].msg;
+                                    messageWindow[0].appendChild(myChatContent);
+                                }
+                                if (JSON.stringify(getMsgData[i].fromUserName) === prat && JSON.stringify(getMsgData[i].toUserName) === mohit) {
+                                    myChatContent = document.createElement('div');
+                                    myChatContent.className = 'OtherChatContent';
+                                    myChatContent.innerHTML = getMsgData[i].msg;
+                                    messageWindow[0].appendChild(myChatContent);
+                                }
+                                self.dragDrop(myChatContent, messageWindow[0]);
+                            }
+                            if (getMsgData[i].msgType === "img") {
+                                var showImage;
+                                var myImage1;
+                                if (currentUserName === JSON.stringify(getMsgData[i].fromUserName) && JSON.stringify(getMsgData[i].toUserName) === prat) {
+                                    myImage1 = document.createElement('img');
+                                    myImage1.className = 'MyImage1';
+                                    myImage1.src = getMsgData[i].msg;
+                                    showImage = getMsgData[i].msg;
+                                    messageWindow[0].appendChild(myImage1);
+                                }
+                                if (JSON.stringify(getMsgData[i].fromUserName) === prat && JSON.stringify(getMsgData[i].toUserName) === mohit) {
+                                    myImage1 = document.createElement('img');
+                                    myImage1.className = 'OtherImage1';
+                                    myImage1.src = getMsgData[i].msg;
+                                    showImage = getMsgData[i].msg;
+                                    messageWindow[0].appendChild(myImage1);
+                                }
+                                myImage1.addEventListener('click', new OpenImage(myImage1, showImage));
+                            }
+                        }
+
+                }
+                self.previousMsg = getMsgData;
+                self.loadedOnce = true;
+            }
+        };
+        xhttp.open("get", "/getMessage", true);
+        xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+        xhttp.send();
+
+    }
+}
+var Dps = [];
+Dps.push(new DpOnClick());

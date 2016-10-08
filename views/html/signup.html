@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>sign up</title>
+    <link rel="stylesheet" href="\css\signup.css">
+</head>
+<body>
+
+<section class="Loginform cf">
+    <!--<form name="login" accept-charset="utf-8">-->
+        <ul>
+            <li>
+                <input type="text" id="username" name="username" placeholder="User Name" required>
+            </li>
+            <li>
+                <input type="email" id="usermail" name="usermail" placeholder="Email" required>
+            </li>
+            <li>
+                <input type="password" id="password" name="password" placeholder="Password" required></li>
+            <li>
+            <li>
+                <input type="password" id="confirmPassword" name="confirmPassword" placeholder="Confirm Password" required></li>
+            <li>
+                <!--<a href="home.html">-->
+                <button id="signup" type="button" onclick="signupFxn()">Sign up</button>
+                <!--</a>-->
+            </li>
+        </ul>
+    <!--</form>-->
+</section>
+<script>
+
+    var signupFxn = function () {
+        var username = document.getElementById("username");
+        var usermail = document.getElementById("usermail");
+        var password = document.getElementById("password");
+        var confirmPassword = document.getElementById("confirmPassword");
+        var signup = document.getElementById("signup");
+
+        console.log(username);
+        var xhttp = new XMLHttpRequest();
+        xhttp.onreadystatechange = function () {
+            if (xhttp.readyState == 4 && xhttp.status == 200) {
+                if (xhttp.response === "true") {
+
+                }
+            }
+        };
+        if (password.value === confirmPassword.value){
+            xhttp.open("post", "/register", true);
+            xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+            xhttp.send("userName=" + username.value + "&userMail="+usermail.value+"&password=" + password.value);
+        }else{
+            alert("password did not match");
+        }
+
+    }
+</script>
+</body>
+</html>

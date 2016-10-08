@@ -1,0 +1,147 @@
+.chatBox {
+    width: 250px;
+    height: 310px;
+    position: fixed;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 2px 2px 30px #888888;
+    z-index: 500;
+}
+
+.chatBox .cbHeader {
+    background-color: #114b5f;
+    color: white;
+    cursor: move;
+    height: 30px;
+}
+
+.chatBox .cbHeaderTitle {
+    display: inline-block;
+    width: 75%;
+    padding: 5px 0px 5px 10px;
+    box-sizing: border-box;
+}
+
+.chatBox .cbHeaderButtons {
+    display: inline-block;
+    float: right;
+    padding: 5px 0px 5px 0px;
+    width: 25%;
+    box-sizing: border-box;
+    text-align: right;
+}
+
+.chatBox .btnRx {
+    display: inline-block;
+    margin-right: 10px;
+    cursor: pointer;
+}
+
+.chatBox .btnClose {
+    display: inline-block;
+    margin-right: 10px;
+    cursor: pointer;
+}
+
+.chatBox .chatWindow {
+    background-color: rgba(250, 246, 246, 0.95);
+    height: calc(100% - 60px);
+    width: 100%;
+    overflow-x: hidden;
+    overflow-y: auto;
+    box-sizing: border-box;
+    position: absolute;
+}
+
+.chatBox .cbFooter {
+    position: absolute;
+    bottom: 0px;
+    width: 100%;
+    height: 30px;
+}
+
+.chatBox .cbInput {
+    display: inline-block;
+    width: 88%;
+    background-color: grey;
+    height: 100%;
+    float: left;
+}
+
+.chatBox .cbInput input {
+    width: 100%;
+    box-sizing: border-box;
+    height: 100%;
+    border-style: inset;
+    font-size: 1em;
+    padding-left: 10px;
+    background-color: rgba(250, 239, 239, 0.95);
+}
+
+.chatBox .btnSend {
+    display: inline-block;
+    float: right;
+    height: 100%;
+    width: 12%;
+    background-color: #114b5f;
+}
+
+.chatBox .btnSend button {
+    height: 100%;
+    cursor: pointer;
+    background: none;
+    border-style: none;
+    font-size: 1em;
+    color: white;
+}
+
+.chatBox .bubbleCell {
+    width: 95%;
+    display: block;
+    clear: both;
+    padding: 10px 5px;
+}
+
+.chatBox .bubbleContainer {
+    max-width: 80%;
+    display: block;
+    height: auto;
+    word-wrap: break-word;
+    padding: 8px;
+    margin-bottom: 5px;
+    border-radius: 20px;
+    font-size: 1em;
+}
+
+.bubbleContainer img {
+    max-width: 100%;
+    max-height: 100%;
+    cursor: pointer;
+}
+
+.bubbleContainer .btnRx {
+    width: 100px;
+    height: 100px;
+    margin: auto;
+    font-size: 5em;
+    border-style: none;
+    background: none;
+    background-image: none;
+    cursor: pointer;
+}
+
+.chatBox .myBubble {
+    float: right;
+    background-color: lightblue;
+}
+
+.chatBox .otherBubble {
+    float: left;
+    background-color: lightcoral;
+}
+
+.chatBox .bubbleDispName {
+    font-size: smaller;
+    margin-bottom: 10px;
+    text-decoration: underline;
+}

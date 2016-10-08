@@ -1,0 +1,37 @@
+.DpProp {
+    height: calc(100% - 100px);
+    width: 100%;
+    top: 80px;
+    left: 0px;
+    position: absolute;
+    display: inline-flex;
+    overflow: auto;
+    box-sizing: border-box;
+}
+
+.DpContainer {
+    text-align: center;
+    display: inline-block;
+    height: 230px;
+    width: 170px;
+    padding: 10px;
+    margin: 10px;
+}
+
+.Dp {
+    border-radius: 50%;
+    max-height: 100%;
+    max-width: 100%;
+    width: 150px;
+    height: 150px;;
+}
+
+.Dp:hover {
+    box-shadow: 2px 4px 13px rgb(144, 144, 144);
+    cursor: pointer;
+}
+
+.Uname {
+    color: #ffb734;
+    text-align: center;
+}

@@ -1,0 +1,199 @@
+::-webkit-scrollbar {
+    width: 5px;
+    height: 5px;
+    background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #d2d2d2;
+    border-radius: 3px;
+}
+
+label {
+    display: block;
+    color: #ffffff;
+}
+
+.cf:before,
+.cf:after {
+    content: "";
+    display: table;
+    clear: both;
+}
+
+.Loginform {
+    background-color: rgba(255, 140, 0, 0.8);
+    background: rgba(255, 140, 0, 0.8);
+    color: rgba(255, 140, 0, 0.8);
+    width: 250px;
+    margin: 120px auto;
+    height: 96px;
+    padding: 25px;
+    float: top;
+    background-color: rgba(250, 250, 250, 0.5);
+
+    box-shadow: 0px 0px 5px 0px rgba(0, 0, 0, 0.2);
+    inset: 0px 1px 0px 0px rgba(250, 250, 250, 0.5);
+    border: 1px solid rgba(0, 0, 0, 0.3);
+}
+
+.Loginform ul {
+    padding: 0;
+    margin: 0;
+}
+
+.Loginform li {
+    display: inline;
+    float: left;
+}
+
+.Loginform input:not([type=submit]) {
+    border: 2px solid rgba(51, 51, 51, .5);
+    padding: 5px;
+    font-size: 16px;
+    line-height: 20px;
+    width: 118%;
+    text-align: center;
+    outline: none;
+    border-top: none;
+    border-left: none;
+    border-right: none;
+    background: transparent;
+    /*/width: 200px;*/
+}
+
+.submit {
+    border: 1px solid rgba(0, 0, 0, 0.3);
+    background: rgba(255, 183, 52, 0.8);
+    background: -moz-linear-gradient(top, rgba(255, 183, 52, 0.81) 0%, #ff6f00 100%);
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, rgba(255, 183, 52, 0.81)), color-stop(100%, #ff6f00));
+    background: -webkit-linear-gradient(top, rgba(255, 183, 52, 0.8) 0%, #ff6f00 100%);
+    background: -o-linear-gradient(top, rgba(255, 183, 52, 0.8) 0%, #ff6f00 100%);
+    background: -ms-linear-gradient(top, rgba(255, 183, 52, 0.8) 0%, #ff6f00 100%);
+    background: linear-gradient(to bottom, rgba(255, 183, 52, 0.8) 0%, #ff6f00 100%);
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#64c8ef', endColorstr='#00a2e2', GradientType=0);
+    color: #fff;
+    padding: 5px 15px;
+    /*position: absolute;*/
+    margin-top: 15px;
+    margin-left: 91px;
+    text-shadow: 1px 1px 0px rgba(0, 0, 0, 0.3);
+}
+
+.Head {
+    /*background-color: rgb(255, 183, 52);*/
+    /*background: rgb(255, 183, 52);*/
+    /*color: rgb(255, 183, 52);*/
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 80px;
+    /*box-shadow: 2px 4px 13px rgba(0, 0, 0, .5);*/
+    display: inline;
+    z-index: 400;
+    box-shadow: 2px 4px 13px rgba(0, 0, 0, .5);
+    /* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#ea8202+47,f4ce5d+100 */
+   /* background: rgb(234,130,2); !* Old browsers *!
+    background: -moz-linear-gradient(top,  rgba(234,130,2,1) 47%, rgba(244,206,93,1) 100%); !* FF3.6-15 *!
+    background: -webkit-linear-gradient(top,  rgba(234,130,2,1) 47%,rgba(244,206,93,1) 100%); !* Chrome10-25,Safari5.1-6 *!
+    background: linear-gradient(to bottom,  rgba(234,130,2,1) 47%,rgba(244,206,93,1) 100%); !* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ *!
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ea8202', endColorstr='#f4ce5d',GradientType=0 ); !* IE6-9 *!
+*/
+    background: rgba(255, 183, 52, 0.8);
+    background: -moz-linear-gradient(top, rgba(255, 183, 52, 0.81) 0%, #ff6f00 100%);
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, rgba(255, 183, 52, 0.81)), color-stop(100%, #ff6f00));
+    background: -webkit-linear-gradient(top, rgba(255, 183, 52, 0.8) 0%, #ff6f00 100%);
+    background: -o-linear-gradient(top, rgba(255, 183, 52, 0.8) 0%, #ff6f00 100%);
+    background: -ms-linear-gradient(top, rgba(255, 183, 52, 0.8) 0%, #ff6f00 100%);
+    background: linear-gradient(to bottom, rgba(255, 183, 52, 0.8) 0%, #ff6f00 100%);
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#64c8ef', endColorstr='#00a2e2', GradientType=0);
+
+}
+
+.SiteName {
+    color: white;
+    text-align: center;
+    font-size: 50px;
+    position: absolute;
+    float: left;
+    left: 0;
+    top: 0;
+    width: 200px;
+    height: 80px;
+    display: block;
+}
+
+#Welcome {
+    color: white;
+    text-align: center;
+    font-size: 25px;
+    position: absolute;
+    float: right;
+    right: 50%;
+    width: 200px;
+    height: 80px;
+    top: 20px;
+    display: block;
+}
+
+.Search {
+    position: relative;
+    padding: 7px 15px;
+    border: 2px solid #ffffff;
+    background-color: #ffffff;
+    float: right;
+    right: 20px;
+    top: 20px;
+}
+
+.SButton {
+    position: relative;
+    padding: 6px 15px;
+    border: 2px solid #207cca;
+    background-color: #207cca;
+    color: #fafafa;
+    float: right;
+    right: 20px;
+    top: 20px;
+}
+#signupBtn{
+    border: 1px solid rgba(0, 0, 0, 0.3);
+    background: rgba(255, 183, 52, 0.8);
+    background: -moz-linear-gradient(top, rgba(255, 183, 52, 0.81) 0%, #ff6f00 100%);
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, rgba(255, 183, 52, 0.81)), color-stop(100%, #ff6f00));
+    background: -webkit-linear-gradient(top, rgba(255, 183, 52, 0.8) 0%, #ff6f00 100%);
+    background: -o-linear-gradient(top, rgba(255, 183, 52, 0.8) 0%, #ff6f00 100%);
+    background: -ms-linear-gradient(top, rgba(255, 183, 52, 0.8) 0%, #ff6f00 100%);
+    background: linear-gradient(to bottom, rgba(255, 183, 52, 0.8) 0%, #ff6f00 100%);
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#64c8ef', endColorstr='#00a2e2', GradientType=0);
+    color: #fff;
+    padding: 5px 15px;
+    margin-right: -26px;
+    margin-top: 74px;
+    /* position: absolute; */
+    float: right;
+    margin-left: 55%;
+    text-shadow: 1px 1px 0px rgba(0, 0, 0, 0.3);
+}
+#signupFrame{
+    border: none;
+    margin: 120px auto;
+    padding: 25px;
+    float: right;
+    margin-right: calc(50% - 186px);
+    margin-top: 45px;
+    height: 468px;
+    width: 321px;
+    visibility: hidden;
+}
+#signupFadder{
+    left: 0;
+    position: fixed;
+    top: 0;
+    background-color: rgba(0, 0, 0, 0.74);
+    z-index: 500;
+    width: 100%;
+    height: 100%;
+    visibility: hidden;
+}
